@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Pegawai</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 0;
+        }
+
+        table {
+            width: 50%;
+            margin: 50px auto;
+            border-collapse: collapse;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            background-color: #ffffff;
+        }
+
+        th, td {
+            padding: 12px;
+            border: none;
+            border-bottom: 1px solid #dddddd;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+            width: 25%;
+        }
+
+        input[type="text"] {
+            width: calc(100% - 24px);
+            padding: 10px;
+            margin: 5px 0;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #4CAF50;
+        }
+
+        button {
+            background-color: #4CAF50; 
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            float: right;
+            margin-top: 10px;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #45a049; 
+        }
+
+        #hasil {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 4px;
+            background-color: #ffffff;
+        }
+
+        #hasil p {
+            margin: 0;
+        }
+
+        caption {
+            text-align: center;
+            font-weight: bold;
+            font-size: 20px;
+            padding: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <form action="">
+        <table>
+            <caption>Data Pegawai</caption>
+            <tr>
+                <td><label for="nama">Nama</label></td>
+                <td><input type="text" name="nama" id="nama" placeholder="Masukkan Nama Pegawai"></td>
+            </tr>
+            <tr>
+                <td><label for="jabatan">Jabatan</label></td>
+                <td>
+                    <select name="jabatan" id="jabatan">
+                        <option value="Manager">Manager</option>
+                        <option value="Asisten Manager">Asisten Manager</option>
+                        <option value="Staff">Staff</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td><label for="status">Status</label></td>
+                <td>
+                    <select name="status" id="status">
+                        <option value="Menikah">Menikah</option>
+                        <option value="Belum Menikah">Belum Menikah</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <th colspan="2">
+                    <button type="button" onclick="cetakData()">Submit</button>
+                </th>
+            </tr>
+        </table>
+    </form>
+    <div id="hasil"></div>
+
+    <script>
+        function Pegawai(nama, jabatan, status, gaji) {
+            this.nama = nama;
+            this.jabatan = jabatan;
+            this.status = status;
+            this.gaji = gaji;
+        }
+
+        function hitungTunjanganJabatan(gaji) {
+    switch (gaji) {
+        case 15000000:
+            return 0.15 * gaji;
+        case 10000000:
+            return 0.15 * gaji;
+        case 5000000:
+            return 0.15 * gaji;
+        default:
+            return 0;
+    }
+}
+
+        function hitungBPJS(gaji) {
+            return 0.10 * gaji;
+        }
+
+        function hitungTunjanganKeluarga(status, gaji) {
+            return (status === 'Menikah') ? 0.20 * gaji : 0;
+        }
+
+        function cetakData() {
+            var nama = document.getElementById('nama').value;
+            var jabatan = document.getElementById('jabatan').value;
+            var status = document.getElementById('status').value;
+            var gaji;
+
+            switch (jabatan) {
+                case 'Manager':
+                    gaji = 15000000;
+                    break;
+                case 'Asisten Manager':
+                    gaji = 10000000;
+                    break;
+                case 'Staff':
+                    gaji = 5000000;
+                    break;
+                default:
+                    gaji = 0;
+            }
+
+            var pegawai = new Pegawai(nama, jabatan, status, gaji);
+            var tunjanganJabatan = hitungTunjanganJabatan(gaji);
+            var bpjs = hitungBPJS(gaji);
+            var tunjanganKeluarga = hitungTunjanganKeluarga(status, gaji);
+            var totalGaji = gaji + tunjanganJabatan - bpjs + tunjanganKeluarga;
+
+            var hasil = "<table><thead><tr><th>Nama Pegawai</th><th>Jabatan</th><th>Status</th><th>Gaji Pokok</th><th>Tunjangan Jabatan</th><th>BPJS</th><th>Tunjangan Keluarga</th></tr></thead><tbody>";
+            hasil += "<tr><td>" + pegawai.nama + "</td><td>" + pegawai.jabatan + "</td><td>" + pegawai.status + "</td><td>" + gaji + "</td><td>" + tunjanganJabatan + "</td><td>" + bpjs + "</td><td>" + tunjanganKeluarga + "</td></tr>";
+            hasil += "</tbody><tfoot><tr><td colspan='7'>Total Gaji: " + totalGaji + "</td></tr></tfoot></table>";
+
+            document.getElementById('hasil').innerHTML = hasil;
+        }
+        
+    </script>
+    <script src="js/app.js"></script>
+</body>
+</html>
